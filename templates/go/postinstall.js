@@ -6,9 +6,9 @@ const { join, dirname } = require('path');
 const os = platform();
 const a = arch();
 // Map Node's arch/platform names back to Go's so the right platform package
-// resolves. Most match; the exceptions are x64->amd64 and mipsel->mipsle.
-const goArch = a === 'x64' ? 'amd64' : a === 'mipsel' ? 'mipsle' : a;
-const goos = os === 'win32' ? 'windows' : os; // 'freebsd' matches as-is
+// resolves. Most match; the one exception is x64->amd64.
+const goArch = a === 'x64' ? 'amd64' : a;
+const goos = os === 'win32' ? 'windows' : os; // 'linux'/'darwin' match as-is
 const ext = os === 'win32' ? '.exe' : '';
 
 // On Linux, glibc and musl builds ship as separate platform packages (the musl

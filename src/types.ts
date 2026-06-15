@@ -3,8 +3,8 @@ import type { PythonVersion, SensorType } from '@camera.ui/sdk';
 export type PluginLanguage = 'python' | 'typescript' | 'go';
 
 export interface GoTarget {
-  goos: 'linux' | 'darwin' | 'windows' | 'freebsd';
-  goarch: 'amd64' | 'arm64' | 'mipsle' | 'riscv64';
+  goos: 'linux' | 'darwin' | 'windows';
+  goarch: 'amd64' | 'arm64';
   libc?: 'glibc' | 'musl';
   cgoEnabled?: '0' | '1';
   cc?: string;

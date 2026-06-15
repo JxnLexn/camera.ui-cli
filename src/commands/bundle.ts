@@ -33,19 +33,15 @@ function nodeOsToGoos(p: string): string {
 }
 
 function nodeArchToGoarch(a: string): string {
-  if (a === 'x64') return 'amd64';
-  if (a === 'mipsel') return 'mipsle'; // npm/Node spells it 'mipsel', Go 'mipsle'
-  return a;
+  return a === 'x64' ? 'amd64' : a;
 }
 
 function goosToNpmOs(g: string): string {
-  return g === 'windows' ? 'win32' : g; // 'freebsd' maps through unchanged
+  return g === 'windows' ? 'win32' : g; // 'linux'/'darwin' map through unchanged
 }
 
 function goarchToNpmCpu(g: string): string {
-  if (g === 'amd64') return 'x64';
-  if (g === 'mipsle') return 'mipsel'; // Go 'mipsle' -> npm/Node 'mipsel'
-  return g; // arm64, riscv64 share the same name
+  return g === 'amd64' ? 'x64' : g; // 'arm64' is the same in both
 }
 
 function targetLibc(t: Pick<GoTarget, 'goos' | 'libc'>): 'glibc' | 'musl' | undefined {
