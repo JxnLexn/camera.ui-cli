@@ -229,6 +229,8 @@ async function processPackageJson({ rootDir, outDir, external, pluginLanguage, g
 
     packageJson.type = 'commonjs';
 
+    delete packageJson.private;
+
     // TODO: Uncomment when server-side compatibility check is implemented
     // // Extract @camera.ui/sdk version from devDependencies before deleting
     // // This will be added as peerDependency for runtime compatibility checking
