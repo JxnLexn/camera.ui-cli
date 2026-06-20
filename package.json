@@ -15,6 +15,7 @@
     "test": "vitest run",
     "release": "bash scripts/release.sh",
     "update": "updates --update ./",
+    "install-updates": "npm i --save",
     "prepublishOnly": "npm i --package-lock-only && npm run lint:fix && npm run format && npm run build"
   },
   "dependencies": {
