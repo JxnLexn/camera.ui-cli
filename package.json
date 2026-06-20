@@ -17,7 +17,8 @@
     "prepublishOnly": "npm i --package-lock-only && npm run lint:fix && npm run format && npm run build",
     "release": "bash scripts/release.sh",
     "test": "vitest run",
-    "update": "updates --update ./"
+    "update:templates": "node scripts/update-templates.mjs",
+    "update": "updates --update ./ && npm run update:templates"
   },
   "dependencies": {
     "@camera.ui/sdk": "~0.0.7",
