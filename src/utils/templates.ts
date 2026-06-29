@@ -135,15 +135,12 @@ export async function createPackageJson(projectName: string, options: CreateOpti
     if (options.language === 'go') {
       pJson.scripts.format = 'gofmt -w .';
       pJson.scripts.lint = 'go vet ./...';
-      pJson.scripts['lint:fix'] = 'go vet ./...';
     } else if (options.language === 'python') {
       pJson.scripts.format = 'ruff format';
-      pJson.scripts.lint = 'ruff check';
-      pJson.scripts['lint:fix'] = 'ruff check --fix';
+      pJson.scripts.lint = 'ruff check --fix';
     } else {
       pJson.scripts.format = 'prettier --write "src/" --ignore-unknown --no-error-on-unmatched-pattern';
-      pJson.scripts.lint = 'eslint .';
-      pJson.scripts['lint:fix'] = 'eslint --fix .';
+      pJson.scripts.lint = 'eslint --fix .';
     }
   }
 
@@ -152,9 +149,9 @@ export async function createPackageJson(projectName: string, options: CreateOpti
     pJson.scripts['bundle:dev'] = 'npm run build && ' + pJson.scripts['bundle:dev'];
   }
 
-  if (pJson.scripts['lint:fix']) {
-    pJson.scripts.bundle = 'npm run lint:fix && ' + pJson.scripts.bundle;
-    pJson.scripts['bundle:dev'] = 'npm run lint:fix && ' + pJson.scripts['bundle:dev'];
+  if (pJson.scripts.lint) {
+    pJson.scripts.bundle = 'npm run lint && ' + pJson.scripts.bundle;
+    pJson.scripts['bundle:dev'] = 'npm run lint && ' + pJson.scripts['bundle:dev'];
   }
 
   if (pJson.scripts.format) {
