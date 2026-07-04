@@ -51,6 +51,41 @@ export function targetKey(t: Pick<GoTarget, 'goos' | 'goarch' | 'libc'>): string
   return targetLibc(t) === 'musl' ? `${t.goos}-${t.goarch}-musl` : `${t.goos}-${t.goarch}`;
 }
 
+const VALID_NPM_OS = ['darwin', 'linux', 'win32'];
+const VALID_NPM_CPU = ['x64', 'arm64'];
+
+// Every plugin must make an explicit platform statement in its package.json:
+// npm-standard `os`/`cpu` arrays (values may be negated with a leading "!"),
+// with an EMPTY array meaning "all platforms". Absent fields are rejected so
+// plugin authors can't skip the question by accident — camera.ui uses the
+// declaration to gate local starts and remote-worker placement.
+function validatePlatformDeclaration(packageJson: Record<string, unknown>): void {
+  const check = (field: 'os' | 'cpu', valid: string[]) => {
+    const value = packageJson[field];
+
+    if (value === undefined) {
+      throw new Error(
+        `package.json is missing the "${field}" field. Declare the supported platforms explicitly, ` +
+        `e.g. "${field}": ${JSON.stringify(valid)} — or "${field}": [] if every platform is supported.`,
+      );
+    }
+
+    if (!Array.isArray(value) || value.some((entry) => typeof entry !== 'string')) {
+      throw new Error(`package.json "${field}" must be an array of strings (npm platform semantics).`);
+    }
+
+    for (const entry of value) {
+      const name = entry.startsWith('!') ? entry.slice(1) : entry;
+      if (!valid.includes(name)) {
+        throw new Error(`package.json "${field}" contains "${entry}" — valid values are: ${valid.join(', ')} (optionally negated with "!").`);
+      }
+    }
+  };
+
+  check('os', VALID_NPM_OS);
+  check('cpu', VALID_NPM_CPU);
+}
+
 function resolveGoTargets(mode: string | undefined, goOpts?: GoBuildOptions): GoTarget[] {
   if (mode === 'development') {
     const hostGoos = nodeOsToGoos(platform()) as GoTarget['goos'];
@@ -225,6 +260,15 @@ async function processPackageJson({ rootDir, outDir, external, pluginLanguage, g
 
     const mainFile = pluginLanguage === 'python' ? 'main.py' : pluginLanguage === 'go' ? 'main.go' : 'index.js';
     packageJson.main = pluginLanguage === 'go' ? './main.go' : `./dist/${mainFile}`;
+
+    // Go plugins: derive the npm platform declaration from the build targets —
+    // they ARE the truth about where the plugin can run.
+    if (pluginLanguage === 'go' && goTargets?.length) {
+      packageJson.os ??= [...new Set(goTargets.map((t) => goosToNpmOs(t.goos)))];
+      packageJson.cpu ??= [...new Set(goTargets.map((t) => goarchToNpmCpu(t.goarch)))];
+    }
+
+    validatePlatformDeclaration(packageJson);
 
     packageJson.type = 'commonjs';
 
