@@ -10,7 +10,7 @@
   "dependencies": {},
   "devDependencies": {
     "cross-env": "^10.1.0",
-    "updates": "^18.0.6"
+    "updates": "^18.0.7"
   },
   "engines": {},
   "keywords": [
