@@ -20,7 +20,7 @@
     "update": "updates --update ./ && npm run update:templates"
   },
   "dependencies": {
-    "@camera.ui/sdk": "~1.2.33",
+    "@camera.ui/sdk": "~1.2.34",
     "@clack/prompts": "^1.7.0",
     "adm-zip": "^0.6.0",
     "commander": "^15.0.0",
