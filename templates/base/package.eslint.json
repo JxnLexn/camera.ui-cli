@@ -1,5 +1,5 @@
 {
   "@stylistic/eslint-plugin": "^5.10.0",
   "eslint": "^9.39.4",
-  "globals": "^17.11.0"
+  "globals": "^17.12.0"
 }
