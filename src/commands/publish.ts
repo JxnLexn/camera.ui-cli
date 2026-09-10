@@ -18,7 +18,7 @@ function handleCancel<T>(value: T | symbol): T {
     showCancel('Operation cancelled');
     process.exit(0);
   }
-  return value;
+  return value as T;
 }
 
 function validateBundle(): boolean {
