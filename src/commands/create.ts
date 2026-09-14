@@ -21,6 +21,7 @@ import {
 } from '../utils/templates.js';
 import { ensureDir } from '../utils/utils.js';
 
+import type { CANCEL_SYMBOL } from '@clack/prompts';
 import type { CreateOptions, PluginLanguage, PluginRole } from '../types.js';
 
 type SelectableSensorType = Exclude<SensorType, SensorType.ObjectAssist>;
@@ -68,12 +69,12 @@ const SENSOR_OPTIONS = Object.values(SensorType)
 
   .map((value) => ({ value, label: SENSOR_LABELS[value] }) as SensorOption);
 
-function handleCancel<T>(value: T | symbol): T {
+function handleCancel<T>(value: T | typeof CANCEL_SYMBOL): T {
   if (isCancel(value)) {
     showCancel('Operation cancelled');
     process.exit(0);
   }
-  return value as T;
+  return value;
 }
 
 export async function createProject(projectName: string) {

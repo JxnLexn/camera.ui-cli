@@ -9,16 +9,17 @@ import semver from 'semver';
 import { showCancel, showIntro, showOutro } from '../utils/banners.js';
 import * as log from '../utils/logger.js';
 
+import type { CANCEL_SYMBOL } from '@clack/prompts';
 import type { PublishOptions } from '../types.js';
 
 const execAsync = promisify(exec);
 
-function handleCancel<T>(value: T | symbol): T {
+function handleCancel<T>(value: T | typeof CANCEL_SYMBOL): T {
   if (isCancel(value)) {
     showCancel('Operation cancelled');
     process.exit(0);
   }
-  return value as T;
+  return value;
 }
 
 function validateBundle(): boolean {
