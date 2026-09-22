@@ -25,7 +25,7 @@
     "adm-zip": "^0.6.1",
     "commander": "^15.0.0",
     "esbuild": "^0.28.2",
-    "fs-extra": "^11.4.0",
+    "fs-extra": "^11.4.1",
     "picocolors": "^1.1.1",
     "semver": "^7.8.5",
     "ts-import": "^5.0.0-beta.1"
